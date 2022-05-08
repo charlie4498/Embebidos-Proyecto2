@@ -1,28 +1,11 @@
 
 import cv2
 import numpy as np
+import sys
+from timeit import default_timer as timer
 import tflite_runtime.interpreter as tflite
 
-#from keras.preprocessing.image import img_to_array
-
-interpreter=tflite.Interpreter(model_path="converted_model.tflite")
-interpreter.allocate_tensors()
-
-# Get input and output tensors.
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
-
-# We have 6 labels for the model
-
-class_labels = {0:'angry', 1:'disgust', 2:'fear', 3:'happy', 4:'sad', 5:'surprise', 6:'neutral'}
-classes = list(class_labels.values())
-
-# print(class_labels)
-
-face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
 # This function is for designing the overlay text on the predicted image boxes.
-
 def text_on_detected_boxes(text,text_x,text_y,image,font_scale = 1,
 
                            font = cv2.FONT_HERSHEY_SIMPLEX,
@@ -47,76 +30,7 @@ def text_on_detected_boxes(text,text_x,text_y,image,font_scale = 1,
 
     cv2.putText(image, text, (text_x, text_y), font, fontScale=font_scale, color=FONT_COLOR,thickness=FONT_THICKNESS)
 
-# Detection of the emotions on an image:
-
-"""""
-def face_detector_image(img):
-
-    gray = cv2.cvtColor(img.copy(), cv2.COLOR_BGR2GRAY) # Convert the image into GrayScale image
-
-    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
-
-    if faces is ():
-
-        return (0, 0, 0, 0), np.zeros((48, 48), np.uint8), img
-
-    allfaces = []
-
-    rects = []
-
-    for (x, y, w, h) in faces:
-
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-        roi_gray = gray[y:y + h, x:x + w]
-
-        roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
-
-        allfaces.append(roi_gray)
-
-        rects.append((x, w, y, h))
-
-    return rects, allfaces, img
-"""""
-"""""
-def emotionImage(imgPath):
-
-    img = cv2.imread(imgPath)
-
-    rects, faces, image = face_detector_image(img)
-
-    i = 0
-
-    for face in faces:
-
-        roi = face.astype("float") / 255.0
-
-        roi = img_to_array(roi)
-
-        roi = np. expand_dims(roi, axis=0)
-
-        # make a prediction on the ROI, then lookup the class
-
-        preds = classifier.predict(roi)[0]
-
-        label = class_labels[preds.argmax()]
-
-        label_position = (rects[i][0] + int((rects[i][1] / 2)), abs(rects[i][2] - 10))
-
-        i = + 1
-
-        # Overlay our detected emotion on the picture
-
-        text_on_detected_boxes(label, label_position[0],label_position[1], image)
-
-    cv2.imshow("Emotion Detector", image)
-
-    cv2.waitKey(0)
-
-    cv2.destroyAllWindows()
-"""""
-# Detection of the expression on video stream
-
+# Deteccion de cara
 def face_detector_video(img):
 
     # Convert image to grayscale
@@ -139,9 +53,12 @@ def face_detector_video(img):
 
     return (x, w, y, h), roi_gray, img
 
+#Deteccion de emociones
 def emotionVideo(cap):
-
-    while True:
+    x=True
+    tstart= timer()
+    tref= timer()
+    while x:
 
         ret, frame = cap.read()
 
@@ -171,6 +88,10 @@ def emotionVideo(cap):
 
             label= class_labels[int(np.argmax(preds))]
 
+            if (timer()-tref >= Tm):
+                open('Emociones.txt','a').write(label + '\n')
+                tref= tref + Tm
+
             label_position = (rect[0] + rect[1]//50, rect[2] + rect[3]//50)
 
             text_on_detected_boxes(label, label_position[0], label_position[1], image) # You can use this function for your another opencv projects.
@@ -179,6 +100,8 @@ def emotionVideo(cap):
 
             cv2.putText(image, str(fps),(5, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
+            if (timer()-tstart) >= T:
+                x=False
         else:
 
             cv2.putText(image, "No Face Found", (5, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
@@ -194,6 +117,31 @@ def emotionVideo(cap):
     cv2.destroyAllWindows()
 
 
+interpreter=tflite.Interpreter(model_path="converted_model.tflite")
+interpreter.allocate_tensors()
+
+# Get input and output tensors.
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+# We have 6 labels for the model
+
+class_labels = {0:'angry', 1:'disgust', 2:'fear', 3:'happy', 4:'sad', 5:'surprise', 6:'neutral'}
+classes = list(class_labels.values())
+
+# print(class_labels)
+
+face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
 camera = cv2.VideoCapture(0) # If you are using an USB Camera then Change use 1 instead of 0.
 
+T= int(sys.argv[1]) #Tiempo de ejecucion
+Tm= int(sys.argv[2]) #Tiempo de Muestreo
+
+f= open('Emociones.txt', 'r+')
+f.truncate(0)
+f.close
+
 emotionVideo(camera)
+
+
