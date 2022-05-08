@@ -14,8 +14,7 @@ output_details = interpreter.get_output_details()
 
 # We have 6 labels for the model
 
-class_labels = {0: 'Sad', 1: 'Angry', 2: 'Surprise', 3: 'Fear', 4: 'Happy', 5: 'Disgust', 5: 'Neutral'}
-
+class_labels = {0:'angry', 1:'disgust', 2:'fear', 3:'happy', 4:'sad', 5:'surprise', 6:'neutral'}
 classes = list(class_labels.values())
 
 # print(class_labels)
@@ -150,12 +149,13 @@ def emotionVideo(cap):
 
         if np.sum([face]) != 0.0:
 
-            roi = face.astype("float") / 255.0
+            #roi = face.astype("float") / 255.0
 
-            #roi = img_to_array(roi)
-            roi = np.array(roi)
+            #roi1 = img_to_array(roi)
+            roi = np.array(face, dtype= np.float32)
 
-            roi = np.expand_dims(roi, axis=0)
+            roi = np.expand_dims(np.expand_dims(roi, axis=0), axis=-1)
+
 
             interpreter.set_tensor(input_details[0]['index'], roi)
 
