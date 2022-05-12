@@ -2,6 +2,6 @@ import subprocess
 
 comando = 'ipconfig'
 
-def cmd(coamndo):
+def cmd(comando):
     subprocess.run(coamndo, shell=True)
     return
