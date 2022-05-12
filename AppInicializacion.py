@@ -7,4 +7,4 @@ def cmd(comando):
     resultado.check_returncode()
     return 0
 
-cmd('ipconfig')
+cmd('mkdir Prueba')
