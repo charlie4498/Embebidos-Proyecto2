@@ -1,4 +1,8 @@
 import subprocess
 
+comando = 'mkdir Prueba'
 
-subprocess.run('mkdir Prueba2', shell=True)
+def ejecutar(comandos):
+    subprocess.run(comandos, shell=True)
+
+ejecutar(comando)
