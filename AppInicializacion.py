@@ -1,7 +1,5 @@
 import subprocess
 import tkinter as tk
-import time
-
 
 ################ Comandos #################
 comando = 'mkdir Prueba'
@@ -18,30 +16,42 @@ def ejecutar(comandos):
 
 def handle_click(event):
     tiempoEjec = entry1.get()
+    #print(type(tiempoEjec))
     tiempoMues = entry2.get()
-    verificacion(tiempoEjec,tiempoMues)
+    #print(type(tiempoEjec))
+    verificacion(tiempoEjec)
+    verificacion(tiempoMues)
 
 
-def verificacion(tiempoEjec,tiempoMues):
-    if (type(tiempoEjec) != int or type(tiempoMues) != int):
-        window2 = tk.Tk()
-        window2.geometry('400x100')
+##def verificacion(tiempoEjec,tiempoMues):
+##    if (type(int(tiempoEjec)) != int or type(tiempoMues) != int):
+##        mensaje2 = tk.Label(text="Error en los datos introducidos")
+##        mensaje2.config(font=("Courier", 12))
+##        mensaje2.pack()
+##        mensaje2 = tk.Label(text="Vuelva a ejecutar la aplicación")
+##        mensaje2.config(font=("Courier", 12))
+##        mensaje2.pack()
+##    else:
+##        ejecutar(comando)
+
+def verificacion(entrada):
+    try:
+        (int(entrada))
+        
+    except:
         mensaje2 = tk.Label(text="Error en los datos introducidos")
         mensaje2.config(font=("Courier", 12))
         mensaje2.pack()
         mensaje2 = tk.Label(text="Vuelva a ejecutar la aplicación")
         mensaje2.config(font=("Courier", 12))
         mensaje2.pack()
-        time.sleep(5)
-        window2.destroy()
-    else:
-        ejecutar(comando)
+
 
 
 ## MAIN
 
 window = tk.Tk()
-window.geometry('300x120')
+window.geometry('400x153')
 mensaje = tk.Label(text="Inserte tiempo de ejecución")
 mensaje.pack()
 
