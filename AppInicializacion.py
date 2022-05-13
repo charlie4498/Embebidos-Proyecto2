@@ -2,7 +2,7 @@ import subprocess
 import tkinter as tk
 
 
-################ Conados #################
+################ Comandos #################
 comando = 'mkdir Prueba'
 
 def ejecutar(comandos):
