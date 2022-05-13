@@ -19,20 +19,10 @@ def handle_click(event):
     #print(type(tiempoEjec))
     tiempoMues = entry2.get()
     #print(type(tiempoEjec))
-    verificacion(tiempoEjec)
-    verificacion(tiempoMues)
-
-
-##def verificacion(tiempoEjec,tiempoMues):
-##    if (type(int(tiempoEjec)) != int or type(tiempoMues) != int):
-##        mensaje2 = tk.Label(text="Error en los datos introducidos")
-##        mensaje2.config(font=("Courier", 12))
-##        mensaje2.pack()
-##        mensaje2 = tk.Label(text="Vuelva a ejecutar la aplicación")
-##        mensaje2.config(font=("Courier", 12))
-##        mensaje2.pack()
-##    else:
-##        ejecutar(comando)
+    ver1 = verificacion(tiempoEjec)
+    ver2 = verificacion(tiempoMues)
+    ver3 = verificacion2(tiempoEjec,tiempoMues)
+    if (ver1 and ver2 and ver3): ejecutar(comando)
 
 def verificacion(entrada):
     try:
@@ -45,8 +35,21 @@ def verificacion(entrada):
         mensaje2 = tk.Label(text="Vuelva a ejecutar la aplicación")
         mensaje2.config(font=("Courier", 12))
         mensaje2.pack()
+    else:
+        return True
 
-
+def verificacion2(tiempoEjec,tiempoMues):
+    if tiempoEjec < tiempoMues:
+        mensaje2 = tk.Label(text="El tiempo de ejecución debe")
+        mensaje2.config(font=("Courier", 12))
+        mensaje2.pack()
+        mensaje2 = tk.Label(text="ser mayor que el de muestreo")
+        mensaje2.config(font=("Courier", 12))
+        mensaje2.pack()
+        return False
+    else: return True
+    
+        
 
 ## MAIN
 
