@@ -1,8 +1,10 @@
 import subprocess
 import tkinter as tk
+import time
 
 ################ Comandos #################
 comando = 'mkdir Prueba'
+comando2 = 'mkdir Prueba2'
 
 def ejecutar(comandos):
     subprocess.run(comandos, shell=True)
@@ -22,7 +24,12 @@ def handle_click(event):
     ver1 = verificacion(tiempoEjec)
     ver2 = verificacion(tiempoMues)
     ver3 = verificacion2(tiempoEjec,tiempoMues)
-    if (ver1 and ver2 and ver3): ejecutar(comando)
+    if (ver1 and ver2 and ver3):
+        ejecutar(comando)
+        tiempoEjec = int(tiempoEjec)
+        time.sleep(tiempoEjec + 10)
+        ejecutar(comando2)
+    
 
 def verificacion(entrada):
     try:
