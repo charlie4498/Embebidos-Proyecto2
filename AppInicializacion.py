@@ -3,8 +3,8 @@ import tkinter as tk
 import time
 
 ################ Comandos #################
-comando = 'mkdir Prueba'
-comando2 = 'mkdir Prueba2'
+comando = 'ssh user@server path/AppReconocimiento.py'
+comando2 = 'scp user@server path/emociones.txt destination/emociones.txt'
 
 def ejecutar(comandos):
     subprocess.run(comandos, shell=True)
