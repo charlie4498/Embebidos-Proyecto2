@@ -3,7 +3,7 @@ import tkinter as tk
 import time
 
 ################ Comandos #################
-comando = 'ssh user@server path/AppReconocimiento.py'
+comando = 'ssh user@server path/AppReconocimiento.py '
 comando2 = 'scp user@server path/emociones.txt destination/emociones.txt'
 
 def ejecutar(comandos):
@@ -25,16 +25,17 @@ def handle_click(event):
     ver2 = verificacion(tiempoMues)
     ver3 = verificacion2(tiempoEjec,tiempoMues)
     if (ver1 and ver2 and ver3):
+        comando = comando + ' ' + tiempoEjec + ' ' + tiempoMues
         ejecutar(comando)
         tiempoEjec = int(tiempoEjec)
         time.sleep(tiempoEjec + 10)
         ejecutar(comando2)
-    
+
 
 def verificacion(entrada):
     try:
         (int(entrada))
-        
+
     except:
         mensaje2 = tk.Label(text="Error en los datos introducidos")
         mensaje2.config(font=("Courier", 12))
@@ -55,8 +56,8 @@ def verificacion2(tiempoEjec,tiempoMues):
         mensaje2.pack()
         return False
     else: return True
-    
-        
+
+
 
 ## MAIN
 
@@ -82,5 +83,4 @@ button.bind("<Button-1>", handle_click)
 window.mainloop()
 
 
-        
-    
+#Comentario
